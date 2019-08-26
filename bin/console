@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "daffy"
+
+# You can add fixtures and/or initialization code here to make experimenting
+# with your gem easier. You can also use a different console, if you like.
+
+# (If you use this, don't forget to add pry to your Gemfile!)
+# require "pry"
+# Pry.start
+
+require "active_record"
+require "sqlite3"
+
+ActiveRecord::Base.establish_connection(
+  adapter: "sqlite3",
+  database: ":memory:"
+)
+
+ActiveRecord::Schema.define do
+  create_table :users do |t|
+    t.string :first_name
+    t.string :last_name
+    t.date   :enrolled_on
+    t.integer :login_attempts
+    t.string :email
+    t.integer :level, default: 1
+  end
+end
+
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+end
+
+class User < ApplicationRecord
+  include Daffy
+end
+
+require "irb"
+IRB.start(__FILE__)
