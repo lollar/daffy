@@ -13,8 +13,12 @@ class DaffyTest < Minitest::Test
       level:          9,
     )
 
-    @real_user = User.find_by(last_name: "Loblaw")
-    @fake_user = User.find_by(last_name: "Nope!")
+    Guest.create!(email: "guest@example.com")
+
+    @real_user  = User.find_by(last_name: "Loblaw")
+    @fake_user  = User.find_by(last_name: "Nope!")
+    @real_guest = Guest.find_by(email: "guest@example.com")
+    @fake_guest = Guest.new
   end
 
   def test_nil
@@ -50,5 +54,10 @@ class DaffyTest < Minitest::Test
   def test_that_enrolled_on_uses_today
     assert @real_user.enrolled_on == Date.yesterday
     assert @fake_user.enrolled_on == Date.today
+  end
+
+  def test_that_guest_uses_quacked_value
+    assert @real_guest.email == "guest@example.com"
+    assert @fake_guest.email == "no-reply@guest.com"
   end
 end

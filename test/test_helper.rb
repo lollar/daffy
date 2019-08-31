@@ -19,6 +19,18 @@ ActiveRecord::Schema.define do
     t.integer :login_attempts
     t.string :email
     t.integer :level, default: 1
+    t.datetime :created_at, default: "current_timestamp"
+  end
+end
+
+ActiveRecord::Schema.define do
+  create_table :guests do |t|
+    t.string :first_name, default: "Guest"
+    t.string :last_name, default: "User"
+    t.date   :enrolled_on
+    t.integer :login_attempts, default: 1
+    t.string :email
+    t.integer :level
   end
 end
 
@@ -28,4 +40,9 @@ end
 
 class User < ApplicationRecord
   include Daffy
+end
+
+class Guest < ApplicationRecord
+  include Daffy
+  quacks email: "no-reply@guest.com"
 end
